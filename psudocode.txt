@@ -1,0 +1,74 @@
+FUNCTION h1(s, arrSize):
+    hash ← 0
+    FOR each character ch in s:
+        hash ← (hash + ASCII(ch)) MOD arrSize
+    RETURN hash
+
+
+FUNCTION h2(s, arrSize):
+    hash ← 1
+    FOR i from 0 to length(s) - 1:
+        hash ← hash + (19^i * ASCII(s[i]))
+        hash ← hash MOD arrSize
+    RETURN hash
+
+
+FUNCTION h3(s, arrSize):
+    hash ← 7
+    FOR each character ch in s:
+        hash ← (hash * 31 + ASCII(ch)) MOD arrSize
+    RETURN hash
+
+
+FUNCTION h4(s, arrSize):
+    hash ← 3
+    p ← 7
+    FOR i from 0 to length(s) - 1:
+        hash ← hash + (hash * 7 + ASCII(s[0]) * (p^i))
+        hash ← hash MOD arrSize
+    RETURN hash
+
+
+FUNCTION lookup(bitarray, arrSize, s):
+    a ← h1(s, arrSize)
+    b ← h2(s, arrSize)
+    c ← h3(s, arrSize)
+    d ← h4(s, arrSize)
+
+    IF bitarray[a] AND bitarray[b] AND bitarray[c] AND bitarray[d] ARE TRUE:
+        RETURN TRUE
+    ELSE:
+        RETURN FALSE
+
+
+FUNCTION insert(bitarray, arrSize, s):
+    IF lookup(bitarray, arrSize, s) = TRUE:
+        PRINT s + " is Probably already present"
+    ELSE:
+        a ← h1(s, arrSize)
+        b ← h2(s, arrSize)
+        c ← h3(s, arrSize)
+        d ← h4(s, arrSize)
+
+        bitarray[a] ← TRUE
+        bitarray[b] ← TRUE
+        bitarray[c] ← TRUE
+        bitarray[d] ← TRUE
+
+        PRINT s + " inserted"
+
+
+MAIN:
+    DECLARE bitarray[100] initialized to FALSE
+    arrSize ← 100
+    sarray ← ["abound", "abounds", "abundance", "abundant",
+              "accessible", "bloom", "blossom", "bolster", "bonny", "bonus", "bonuses",
+              "coherent", "cohesive", "colorful", "comely", "comfort", "gems",
+              "generosity", "generous", "generously", "genial", "bluff", "cheater",
+              "hate", "war", "humanity", "racism", "hurt", "nuke", "gloomy",
+              "facebook", "geeksforgeeks", "twitter"]
+
+    FOR each string s in sarray:
+        insert(bitarray, arrSize, s)
+
+    END PROGRAM
